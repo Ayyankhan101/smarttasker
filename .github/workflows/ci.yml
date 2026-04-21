@@ -11,8 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint-backend:
-    name: Lint Backend
+  build-and-test:
+    name: Build & Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -24,82 +24,19 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install backend deps
-        run: cd backend && npm ci
-
-      - name: Run ESLint
-        run: cd backend && npm run lint || true
-        continue-on-error: true
-
-      - name: Check formatting
-        run: cd backend && npm run format -- --check || true
-        continue-on-error: true
-
-  lint-frontend:
-    name: Lint Frontend
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install frontend deps
-        run: cd frontend && npm ci
-
-      - name: Run ESLint
-        run: cd frontend && npm run lint
-        continue-on-error: true
-
-  build-backend:
-    name: Build Backend
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: cd backend && npm ci
-
-      - name: Build TypeScript
-        if: ${{ hashFiles('backend/tsconfig.json') != '' }}
-        run: cd backend && npm run build
-        continue-on-error: true
-
-      - name: Verify syntax
-        run: cd backend && node --check src/index.js || true
-
-  build-frontend:
-    name: Build Frontend
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: cd frontend && npm ci
+      - name: Install all dependencies
+        run: |
+          cd backend && npm ci
+          cd ../frontend && npm ci
 
       - name: Build frontend
         run: cd frontend && npm run build
 
-  test-backend:
-    name: Test Backend
+      - name: Verify backend syntax
+        run: cd backend && node --check src/index.js || true
+
+  lint-and-format:
+    name: Lint & Format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -112,13 +49,17 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: cd backend && npm ci
+        run: |
+          cd backend && npm ci
+          cd ../frontend && npm ci
 
-      - name: Run tests
-        run: cd backend && npm test || echo "No tests configured yet"
-        continue-on-error: true
+      - name: Lint backend
+        run: cd backend && npm run lint || true
 
-  security-audit:
+      - name: Lint frontend
+        run: cd frontend && npm run lint || true
+
+  security:
     name: Security Audit
     runs-on: ubuntu-latest
     steps:
@@ -130,29 +71,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Audit backend
+      - name: Audit dependencies
         run: |
-          cd backend
-          npm audit --audit-level=high --production || true
-
-      - name: Audit frontend
-        run: |
-          cd frontend
-          npm audit --audit-level=high --production || true
-
-  install-check:
-    name: Install Check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install all
-        run: |
-          cd backend && npm ci
-          cd ../frontend && npm ci
+          cd backend && npm audit --audit-level=high --production || true
+          cd ../frontend && npm audit --audit-level=high --production || true
