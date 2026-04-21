@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+
+# Database
+*.db
+
+# Uploads
+uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build
+dist/

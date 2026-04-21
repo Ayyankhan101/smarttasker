@@ -1,0 +1,14 @@
+# SmartTasker Project
+
+node_modules/
+dist/
+*.log
+
+# Backend
+.env
+*.db
+uploads/
+
+# OS
+.DS_Store
+Thumbs.db
