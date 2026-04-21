@@ -1,13 +1,32 @@
 #!/bin/bash
 
+# Get script directory (portable - works from any location)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+BACKEND_DIR="$SCRIPT_DIR/backend"
+FRONTEND_DIR="$SCRIPT_DIR/frontend"
+
 case "$1" in
     start)
+        echo "Checking dependencies..."
+        
+        # Install backend deps if node_modules missing
+        if [ ! -d "$BACKEND_DIR/node_modules" ]; then
+            echo "Installing backend dependencies..."
+            cd "$BACKEND_DIR" && npm install
+        fi
+        
+        # Install frontend deps if node_modules missing
+        if [ ! -d "$FRONTEND_DIR/node_modules" ]; then
+            echo "Installing frontend dependencies..."
+            cd "$FRONTEND_DIR" && npm install
+        fi
+        
         echo "Starting SmartTasker..."
-        cd /home/ayyan/SE-ASSIGENMENT/smarttasker/backend && node src/index.js > /tmp/smarttasker-backend.log 2>&1 &
+        cd "$BACKEND_DIR" && node src/index.js > /tmp/smarttasker-backend.log 2>&1 &
         echo $! > /tmp/smarttasker-backend.pid
         sleep 1
         
-        cd /home/ayyan/SE-ASSIGENMENT/smarttasker/frontend && npm run dev -- --host 0.0.0.0 > /tmp/smarttasker-frontend.log 2>&1 &
+        cd "$FRONTEND_DIR" && npm run dev -- --host 0.0.0.0 > /tmp/smarttasker-frontend.log 2>&1 &
         echo $! > /tmp/smarttasker-frontend.pid
         sleep 2
         
@@ -60,6 +79,13 @@ case "$1" in
         ;;
     *)
         echo "Usage: $0 {start|stop|restart|status|logs}"
+        echo ""
+        echo "Commands:"
+        echo "  start    - Start both backend and frontend (installs deps if needed)"
+        echo "  stop     - Stop both servers"
+        echo "  restart  - Restart all servers"
+        echo "  status   - Check if servers are running"
+        echo "  logs     - View server logs"
         exit 1
         ;;
 esac

@@ -22,12 +22,35 @@ Team Task Management System with JWT Authentication, 2FA, Real-time Updates, and
 
 ## Quick Start
 
-### Prerequisites
+### Using the Startup Script (Recommended)
 
-- Node.js 18+
-- Gmail account (for notifications)
+After cloning, you can start everything with one command:
 
-### Backend Setup
+```bash
+# Clone and start
+git clone https://github.com/Ayyankhan101/smarttasker.git
+cd smarttasker
+
+# Configure environment (required for email notifications)
+cp backend/.env.example backend/.env
+# Edit backend/.env with your settings:
+# - SMTP_PASS: Gmail App Password (16 chars, not your email password)
+# - JWT_SECRET: Generate a secure key
+
+# Start everything (installs deps if needed)
+./smarttasker.sh start
+```
+
+Other script commands:
+```bash
+./smarttasker.sh status   # Check if running
+./smarttasker.sh logs    # View logs
+./smarttasker.sh stop    # Stop servers
+```
+
+### Manual Setup
+
+#### Backend
 
 ```bash
 cd backend
@@ -35,9 +58,6 @@ npm install
 
 # Configure .env
 cp .env.example .env
-# Edit .env with your SMTP credentials:
-# - SMTP_PASS: Gmail App Password (not email password)
-# - JWT_SECRET: Generate a secure key
 
 # Start server
 npm start
@@ -45,7 +65,7 @@ npm start
 
 Server runs on http://localhost:5000
 
-### Frontend Setup
+#### Frontend
 
 ```bash
 cd frontend
