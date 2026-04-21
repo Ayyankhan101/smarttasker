@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'backend/node_modules'
+          cache: 'npm'
 
       - name: Install backend deps
         run: cd backend && npm ci
@@ -46,7 +46,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'frontend/node_modules'
+          cache: 'npm'
 
       - name: Install frontend deps
         run: cd frontend && npm ci
@@ -66,7 +66,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'backend/node_modules'
+          cache: 'npm'
 
       - name: Install dependencies
         run: cd backend && npm ci
@@ -90,7 +90,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'frontend/node_modules'
+          cache: 'npm'
 
       - name: Install dependencies
         run: cd frontend && npm ci
@@ -109,7 +109,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'backend/node_modules'
+          cache: 'npm'
 
       - name: Install dependencies
         run: cd backend && npm ci
