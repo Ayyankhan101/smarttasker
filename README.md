@@ -113,6 +113,18 @@ SMTP_PASS=your-16-char-app-password
 - `PUT /api/teams/:id` - Update team
 - `DELETE /api/teams/:id` - Delete team
 
+## File Uploads
+
+Supported file types for task attachments:
+
+- Images: JPEG, PNG, GIF, WebP, SVG
+- Documents: PDF, TXT, DOC, DOCX, XLS, XLSX, PPT, PPTX, ODT, ODS, ODP
+- Archives: ZIP, RAR, 7Z, TAR, GZ
+- Data: CSV, JSON
+- Code: HTML, CSS, JavaScript
+- Media: MP4, MOV, MP3
+- Maximum file size: 10MB
+
 ## Project Structure
 
 ```
