@@ -139,6 +139,66 @@ smarttasker/
     └── package.json
 ```
 
+## Registration Validation Requirements
+
+When registering a new account, the following validation rules apply:
+
+- **`name`**: Minimum 2 characters, maximum 100 characters
+- **`email`**: Must be a valid email format
+- **`password`**: Minimum 6 characters
+
+If validation fails, the API returns a `400 Bad Request` with details:
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    { "field": "password", "message": "Password must be at least 6 characters long" }
+  ]
+}
+```
+
+## Environment Variables (.env)
+
+```env
+PORT=5000
+JWT_SECRET=your-secure-secret-key
+UPLOAD_DIR=./uploads
+FRONTEND_URL=http://localhost:5173
+```
+
+**FRONTEND_URL**: Specifies allowed origins for CORS. When running multiple frontend instances (e.g., Vite dev server on port 5173 and Docker on port 2000), provide comma-separated origins without spaces:
+
+```env
+FRONTEND_URL=http://localhost:5173,http://localhost:2000
+```
+
+## Project Structure
+
+```
+smarttasker/
+├── backend/
+│   ├── src/
+│   │   ├── index.js       # Entry point
+│   │   ├── controllers/  # Route handlers
+│   │   ├── models/       # Data models
+│   │   ├── routes/      # API routes
+│   │   ├── services/    # Business logic
+│   │   ├── middleware/  # Auth & validation
+│   │   ├── db/         # Database
+│   │   └── utils/      # Utilities
+│   └── .env            # Configuration
+│
+└── frontend/
+    ├── src/
+    │   ├── pages/       # Page components
+    │   ├── components/ # Reusable components
+    │   ├── context/    # React contexts
+    │   ├── api/        # API client
+    │   └── hooks/      # Custom hooks
+    └── package.json
+```
+
 ## License
 
 MIT
