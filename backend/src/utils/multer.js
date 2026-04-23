@@ -17,10 +17,32 @@ const fileFilter = (req, file, cb) => {
         'image/jpeg',
         'image/png',
         'image/gif',
+        'image/webp',
+        'image/svg+xml',
         'application/pdf',
         'text/plain',
         'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'application/vnd.oasis.opendocument.text',
+        'application/vnd.oasis.opendocument.spreadsheet',
+        'application/vnd.oasis.opendocument.presentation',
+        'application/zip',
+        'application/x-rar-compressed',
+        'application/x-7z-compressed',
+        'application/x-tar',
+        'application/gzip',
+        'text/csv',
+        'application/json',
+        'text/html',
+        'text/css',
+        'application/javascript',
+        'video/mp4',
+        'video/quicktime',
+        'audio/mpeg'
     ];
 
     if (allowedTypes.includes(file.mimetype)) {
