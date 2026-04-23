@@ -16,8 +16,17 @@ const { initSocket } = require('./services/socketService');
 
 const app = express();
 const server = http.createServer(app);
+app.set('trust proxy', true);
 
-app.use(cors());
+
+const CORS_ORIGINS = process.env.FRONTEND_URL 
+  ? process.env.FRONTEND_URL.split(',').map(o => o.trim())
+  : ['http://localhost:5173', 'http://localhost:2000', 'http://127.0.0.1:5173', 'http://127.0.0.1:2000'];
+
+app.use(cors({
+  origin: CORS_ORIGINS,
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));

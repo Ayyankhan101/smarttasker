@@ -143,7 +143,7 @@ const uploadFile = (req, res) => {
             return res.status(400).json({ error: 'No file uploaded' });
         }
 
-        const { taskId } = req.body;
+        const { id: taskId } = req.params;
         if (!taskId) {
             return res.status(400).json({ error: 'Task ID required' });
         }
