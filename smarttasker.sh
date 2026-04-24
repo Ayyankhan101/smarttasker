@@ -9,6 +9,19 @@ case "$1" in
     start)
         echo "Checking dependencies..."
         
+        # Auto-create .env if missing
+        if [ ! -f "$BACKEND_DIR/.env" ]; then
+            echo "Creating .env with auto-generated JWT_SECRET..."
+            cp "$BACKEND_DIR/.env.example" "$BACKEND_DIR/.env"
+            SECRET=$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 32)
+            sed -i "s/your-super-secret-jwt-key-change-in-production/$SECRET/" "$BACKEND_DIR/.env"
+        fi
+        
+        # Create uploads directory if missing
+        if [ ! -d "$BACKEND_DIR/uploads" ]; then
+            mkdir -p "$BACKEND_DIR/uploads"
+        fi
+        
         # Install backend deps if node_modules missing
         if [ ! -d "$BACKEND_DIR/node_modules" ]; then
             echo "Installing backend dependencies..."

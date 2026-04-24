@@ -5,6 +5,8 @@ const QRCode = require('qrcode');
 const User = require('../models/User');
 require('dotenv').config();
 
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-do-not-use-in-production';
+
 const register = (req, res) => {
     try {
         const { email, password, name } = req.body;
@@ -23,7 +25,7 @@ const register = (req, res) => {
 
         const token = jwt.sign(
             { userId, email, role: 'user' },
-            process.env.JWT_SECRET,
+            JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
         );
 
@@ -61,7 +63,7 @@ const login = (req, res) => {
                 requires2FA: true,
                 tempToken: jwt.sign(
                     { userId: user.id, pending: true },
-                    process.env.JWT_SECRET,
+                    JWT_SECRET,
                     { expiresIn: '5m' }
                 )
             });
@@ -69,7 +71,7 @@ const login = (req, res) => {
 
         const token = jwt.sign(
             { userId: user.id, email: user.email, role: user.role },
-            process.env.JWT_SECRET,
+            JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
         );
 
@@ -112,7 +114,7 @@ const verify2FA = (req, res) => {
             return res.status(400).json({ error: 'Token and verification code required' });
         }
 
-        const decoded = jwt.verify(tempToken, process.env.JWT_SECRET);
+        const decoded = jwt.verify(tempToken, JWT_SECRET);
         if (!decoded.pending) {
             return res.status(400).json({ error: 'Invalid temporary token' });
         }
@@ -137,7 +139,7 @@ const verify2FA = (req, res) => {
 
         const token = jwt.sign(
             { userId: user.id, email: user.email, role: user.role },
-            process.env.JWT_SECRET,
+            JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
         );
 

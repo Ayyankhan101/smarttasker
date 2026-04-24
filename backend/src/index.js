@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const http = require('http');
+const fs = require('fs');
 require('dotenv').config();
 
 const { initDB } = require('./db/connection');
@@ -58,6 +59,12 @@ app.use((err, req, res, next) => {
 let archiveInterval;
 
 async function startServer() {
+    const uploadsDir = path.join(__dirname, '../uploads');
+    if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+        console.log('[Init] Created uploads directory');
+    }
+    
     await initDB();
     initDatabase();
     NotificationService.init();
